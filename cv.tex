@@ -1,0 +1,72 @@
+% cv.tex - all CV content goes here.
+%
+% Everything in this file is made up. Replace it with your own.
+%
+% \cvsection[note]{Section title}{Heading}{Body}
+%   - Section title: shown in the left column (leave empty for a follow-on entry)
+%   - Heading: bold line, e.g. job title and company
+%   - Body: text or an itemize list
+%   - note (optional): small grey line under the entry
+
+%%%%%%%%%%%%%%%%%%%
+% Summary Section %
+%%%%%%%%%%%%%%%%%%%
+\cvsection{Summary}{}{
+    Platform engineer with seven years' experience building cloud infrastructure, developer platforms and reliable services. Enjoys making the safe path the easy path for product teams.
+}
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Experience Section %
+%%%%%%%%%%%%%%%%%%%%%%
+\cvsection{Experience}{Senior Platform Engineer, Example Cloud Ltd}{
+    Dublin, Ireland \\
+    March 2023 -- Present \\
+    \begin{itemize}
+        \item Lead a team of four running the internal developer platform on Kubernetes for 40 product teams.
+        \item Moved infrastructure to reusable Terraform modules, cutting new-service setup from two weeks to one day.
+        \item Introduced service-level objectives and on-call runbooks, reducing paging alerts by 60\%.
+        \item Built a self-service preview environment for every pull request.
+    \end{itemize}
+}
+
+\cvsection{}{Software Engineer, Acme Payments}{
+    Cork, Ireland \\
+    June 2019 -- February 2023 \\
+    \begin{itemize}
+        \item Built and operated Go services handling card authorisations across three regions.
+        \item Designed the multi-region failover plan and ran quarterly game days to test it.
+        \item Wrote observability standards with Prometheus, Grafana and OpenTelemetry.
+    \end{itemize}
+}
+
+\cvsection{}{Graduate Engineer, Sample Analytics}{
+    Galway, Ireland \\
+    September 2018 -- May 2019 \\
+    \begin{itemize}
+        \item Maintained batch data pipelines in Python and Apache Spark.
+    \end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%
+% Skills Section %
+%%%%%%%%%%%%%%%%%%
+\cvsection{Skills}{}{
+    \textbf{\color{gray}Languages:} Go, Python, TypeScript, Bash, SQL \\
+    \textbf{\color{gray}Cloud \& Infrastructure:} AWS, GCP, Kubernetes, Terraform, Helm, Docker, GitOps \\
+    \textbf{\color{gray}Reliability:} Prometheus, Grafana, OpenTelemetry, Incident Response, Post-mortems \\
+    \textbf{\color{gray}Security:} RBAC, Just-in-Time Access, PKI, Secrets Management
+}
+
+%%%%%%%%%%%%%%%%%%%%
+% Projects Section %
+%%%%%%%%%%%%%%%%%%%%
+\cvsection{Projects}{}{
+    \textbf{\href{https://github.com/benkelly/cv-pipeline}{cv-pipeline}}: This CV. One LaTeX file builds standard, accessible, dyslexia-friendly and high-contrast PDFs, plus Markdown, JSON and HTML.
+}
+
+%%%%%%%%%%%%%%%%%%%%%
+% Education Section %
+%%%%%%%%%%%%%%%%%%%%%
+\cvsection{Education}{Example University - BSc Computer Science, 2018}{
+    \textit{Thesis}: ``Scheduling batch jobs on spare cloud capacity''
+}
