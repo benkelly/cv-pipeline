@@ -1,5 +1,5 @@
 {
-  "name": "Alex Example",
+  "name": "Taylor Template",
   "location": "Dublin, Ireland",
   "contact": [
     {
@@ -109,7 +109,7 @@
   ],
   "meta": {
     "source": "cv.tex",
-    "version": "2026.10.24-c4b1648",
+    "version": "2026.10.24-de2fe36",
     "generated": "2026-10-24",
     "variant": "public",
     "generator": "scripts/tex_to_formats.py"

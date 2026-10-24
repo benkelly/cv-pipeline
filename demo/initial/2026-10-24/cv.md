@@ -1,6 +1,6 @@
-# Alex Example
+# Taylor Template
 
-Dublin, Ireland · [+353 00 000 0000](tel:+353000000000) · [alex@example.com](mailto:alex@example.com) · [example.com](https://example.com) · [github.com/benkelly/cv-pipeline](https://github.com/benkelly/cv-pipeline)
+Dublin, Ireland · [+353 00 000 0000](tel:+353000000000) · [taylor@example.com](mailto:taylor@example.com) · [example.com](https://example.com) · [github.com/benkelly/cv-pipeline](https://github.com/benkelly/cv-pipeline)
 
 ## Summary
 

@@ -1,4 +1,4 @@
-# Alex Example
+# Taylor Template
 
 Dublin, Ireland · [jobs@example.com](mailto:jobs@example.com) · [example.com](https://example.com) · [github.com/benkelly/cv-pipeline](https://github.com/benkelly/cv-pipeline)
 

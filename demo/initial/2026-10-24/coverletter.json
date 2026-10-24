@@ -1,5 +1,5 @@
 {
-  "name": "Alex Example",
+  "name": "Taylor Template",
   "location": "Dublin, Ireland",
   "contact": [
     {
@@ -7,8 +7,8 @@
       "url": "tel:+353000000000"
     },
     {
-      "text": "alex@example.com",
-      "url": "mailto:alex@example.com"
+      "text": "taylor@example.com",
+      "url": "mailto:taylor@example.com"
     },
     {
       "text": "example.com",
@@ -49,7 +49,7 @@
   ],
   "meta": {
     "source": "coverletter.tex",
-    "version": "2026.10.24-c4b1648",
+    "version": "2026.10.24-de2fe36",
     "generated": "2026-10-24",
     "variant": "standard",
     "generator": "scripts/tex_to_formats.py"
