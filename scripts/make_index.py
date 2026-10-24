@@ -6,7 +6,7 @@ from pathlib import Path
 
 GROUPS = [
     ("CV", [
-        ("cv.pdf", "Standard", "The normal two-page CV."),
+        ("cv.pdf", "Standard", "The standard CV."),
         ("cv_public.pdf", "Public", "Public contact details, no phone number."),
         ("cv_print.pdf", "Print", "Greyscale, for printing."),
         ("cv_archive.pdf", "Archive", "PDF/A-2b, for long-term storage."),
