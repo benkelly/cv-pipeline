@@ -1,0 +1,121 @@
+{
+  "name": "Taylor Template",
+  "location": "Dublin, Ireland",
+  "contact": [
+    {
+      "text": "+353 00 000 0000",
+      "url": "tel:+353000000000"
+    },
+    {
+      "text": "taylor@example.com",
+      "url": "mailto:taylor@example.com"
+    },
+    {
+      "text": "example.com",
+      "url": "https://example.com"
+    },
+    {
+      "text": "github.com/benkelly/cv-pipeline",
+      "url": "https://github.com/benkelly/cv-pipeline"
+    }
+  ],
+  "sections": [
+    {
+      "title": "Summary",
+      "entries": [
+        {
+          "details": [
+            "Platform engineer with seven years' experience building cloud infrastructure, developer platforms and reliable services. Enjoys making the safe path the easy path for product teams."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Experience",
+      "entries": [
+        {
+          "title": "Senior Platform Engineer, Example Cloud Ltd",
+          "details": [
+            "Dublin, Ireland",
+            "March 2023 – Present"
+          ],
+          "highlights": [
+            "Lead a team of four running the internal developer platform on Kubernetes for 40 product teams.",
+            "Moved infrastructure to reusable Terraform modules, cutting new-service setup from two weeks to one day.",
+            "Introduced service-level objectives and on-call runbooks, reducing paging alerts by 60%.",
+            "Built a self-service preview environment for every pull request."
+          ]
+        },
+        {
+          "title": "Software Engineer, Acme Payments",
+          "details": [
+            "Cork, Ireland",
+            "June 2019 – February 2023"
+          ],
+          "highlights": [
+            "Built and operated Go services handling card authorisations across three regions.",
+            "Designed the multi-region failover plan and ran quarterly game days to test it.",
+            "Wrote observability standards with Prometheus, Grafana and OpenTelemetry."
+          ]
+        },
+        {
+          "title": "Graduate Engineer, Sample Analytics",
+          "details": [
+            "Galway, Ireland",
+            "September 2018 – May 2019"
+          ],
+          "highlights": [
+            "Maintained batch data pipelines in Python and Apache Spark."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Skills",
+      "entries": [
+        {
+          "details": [
+            "Languages: Go, Python, TypeScript, Bash, SQL",
+            "Cloud & Infrastructure: AWS, GCP, Kubernetes, Terraform, Helm, Docker, GitOps",
+            "Reliability: Prometheus, Grafana, OpenTelemetry, Incident Response, Post-mortems",
+            "Security: RBAC, Just-in-Time Access, PKI, Secrets Management"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Projects",
+      "entries": [
+        {
+          "details": [
+            "cv-pipeline: This CV. One LaTeX file builds standard, accessible, dyslexia-friendly and high-contrast PDFs, plus Markdown, JSON and HTML."
+          ],
+          "links": [
+            {
+              "text": "cv-pipeline",
+              "url": "https://github.com/benkelly/cv-pipeline"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Education",
+      "entries": [
+        {
+          "title": "Example University - BSc Computer Science, 2018",
+          "details": [
+            "Thesis: “Scheduling batch jobs on spare cloud capacity”"
+          ]
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "source": "cv.tex",
+    "version": "2026.10.24-ac7670f",
+    "generated": "2026-10-24",
+    "variant": "standard",
+    "generator": "scripts/tex_to_formats.py"
+  }
+}

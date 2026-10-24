@@ -1,0 +1,57 @@
+{
+  "name": "Taylor Template",
+  "location": "Dublin, Ireland",
+  "contact": [
+    {
+      "text": "+353 00 000 0000",
+      "url": "tel:+353000000000"
+    },
+    {
+      "text": "taylor@example.com",
+      "url": "mailto:taylor@example.com"
+    },
+    {
+      "text": "example.com",
+      "url": "https://example.com"
+    },
+    {
+      "text": "github.com/benkelly/cv-pipeline",
+      "url": "https://github.com/benkelly/cv-pipeline"
+    }
+  ],
+  "sections": [
+    {
+      "title": "Recipient",
+      "entries": [
+        {
+          "details": [
+            "Hiring Team",
+            "Example Corp, Dublin",
+            "Date:"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Letter",
+      "entries": [
+        {
+          "details": [
+            "Dear Hiring Team,",
+            "I'm applying for the Platform Engineer role at Example Corp. I build platforms that let product teams ship safely without waiting on anyone, and I'd love to do that for your teams too.",
+            "At Example Cloud I lead the team behind our internal developer platform, used by 40 teams every day. Before that I ran payment services across three regions at Acme Payments.",
+            "Thank you for your time and consideration.",
+            "Best regards,"
+          ]
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "source": "coverletter.tex",
+    "version": "2026.10.24-ac7670f",
+    "generated": "2026-10-24",
+    "variant": "standard",
+    "generator": "scripts/tex_to_formats.py"
+  }
+}
