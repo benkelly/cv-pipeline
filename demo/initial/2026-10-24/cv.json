@@ -113,7 +113,7 @@
   ],
   "meta": {
     "source": "cv.tex",
-    "version": "2026.10.24-230d313",
+    "version": "2026.10.24-c4b1648",
     "generated": "2026-10-24",
     "variant": "standard",
     "generator": "scripts/tex_to_formats.py"
