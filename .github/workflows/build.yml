@@ -1,0 +1,143 @@
+name: Build and publish
+
+# Every pull request gets a preview at  <pages>/<branch>/<date>/
+# Merging to main updates the site root.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    outputs:
+      deploy_path: ${{ steps.prep.outputs.deploy_path }}
+      site_url: ${{ steps.prep.outputs.site_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Work out where this build will live
+        id: prep
+        env:
+          BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          OWNER="${GITHUB_REPOSITORY%%/*}"
+          REPO="${GITHUB_REPOSITORY#*/}"
+          BASE_URL="https://${OWNER,,}.github.io/${REPO}"
+          if [ "$BRANCH" = "main" ]; then
+            DEPLOY_PATH="."
+            SITE_URL="${BASE_URL}/"
+          else
+            # Keep slashes (company/2026/10/24 style names) but nothing else odd
+            SAFE=$(printf '%s' "$BRANCH" | tr -c 'A-Za-z0-9._/-' '-')
+            DEPLOY_PATH="${SAFE}/$(date +%F)"
+            SITE_URL="${BASE_URL}/${DEPLOY_PATH}/"
+          fi
+          echo "deploy_path=${DEPLOY_PATH}" >> "$GITHUB_OUTPUT"
+          echo "site_url=${SITE_URL}" >> "$GITHUB_OUTPUT"
+          echo "VERSION=$(date +%Y.%m.%d)-$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
+
+      - name: Install LaTeX and Ghostscript
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends \
+            texlive-latex-base texlive-latex-recommended texlive-latex-extra \
+            texlive-fonts-recommended texlive-xetex ghostscript poppler-utils
+
+      - name: Build every version
+        run: make all VERSION="$VERSION" PUBLISHED_URL="${{ steps.prep.outputs.site_url }}"
+
+      - name: Show page counts
+        run: |
+          for f in *.pdf; do echo "$f - $(pdfinfo "$f" | awk '/^Pages/ {print $2}') page(s)"; done
+
+      - name: Collect outputs
+        run: |
+          mkdir -p site
+          cp *.pdf *.png index.html site/
+          cp cv*.md cv*.json cv*.html site/ 2>/dev/null || true
+          cp coverletter.md coverletter.json coverletter.html site/ 2>/dev/null || true
+          ls -la site
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cv-${{ github.run_id }}
+          path: site
+
+  deploy:
+    needs: build
+    # Pull requests from forks can't write to this repo, so they only build.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      pull-requests: write
+    concurrency:
+      group: gh-pages
+      cancel-in-progress: false
+    env:
+      DEPLOY_PATH: ${{ needs.build.outputs.deploy_path }}
+      SITE_URL: ${{ needs.build.outputs.site_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check out gh-pages (or start it)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code origin gh-pages >/dev/null; then
+            git fetch --depth 1 origin gh-pages
+            git checkout -B gh-pages origin/gh-pages
+          else
+            git checkout --orphan gh-pages
+            git rm -rfq .
+          fi
+          git clean -fdxq
+          touch .nojekyll
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: cv-${{ github.run_id }}
+          path: /tmp/site
+
+      - name: Copy the build into place
+        run: |
+          if [ "$DEPLOY_PATH" = "." ]; then
+            # Site root: replace the old top-level build files, keep preview folders
+            find . -maxdepth 1 -type f \( -name '*.pdf' -o -name '*.png' -o -name '*.md' -o -name '*.json' -o -name '*.html' \) -delete
+          else
+            # Start the preview folder clean so dropped files don't linger
+            rm -rf "${DEPLOY_PATH:?}"
+            mkdir -p "$DEPLOY_PATH"
+          fi
+          cp -r /tmp/site/. "$DEPLOY_PATH/"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing changed"
+          else
+            git commit -qm "Publish ${DEPLOY_PATH} from ${GITHUB_SHA::7}"
+            git push -q origin gh-pages
+          fi
+
+      - name: Comment the preview link on the pull request
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          BODY="**CV preview:** ${SITE_URL}
+
+          [CV](${SITE_URL}cv.pdf) · [Accessible](${SITE_URL}cv_accessible.pdf) · [Dyslexia-friendly](${SITE_URL}cv_dyslexic.pdf) · [High contrast](${SITE_URL}cv_inverted.pdf) · [Markdown](${SITE_URL}cv.md) · [JSON](${SITE_URL}cv.json)
+
+          <sub>Built from ${GITHUB_SHA::7}. GitHub Pages can take a minute to update.</sub>
+          <!-- cv-preview -->"
+          ID=$(gh api "repos/${GITHUB_REPOSITORY}/issues/${PR}/comments" --jq '[.[] | select(.body | contains("<!-- cv-preview -->"))][0].id // empty')
+          if [ -n "$ID" ]; then
+            gh api -X PATCH "repos/${GITHUB_REPOSITORY}/issues/comments/${ID}" -f body="$BODY" >/dev/null
+          else
+            gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body "$BODY"
+          fi

@@ -1,0 +1,15 @@
+# Build outputs
+*.aux
+*.log
+*.out
+*.pdf
+*.png
+cv*.md
+cv*.json
+cv*.html
+coverletter.md
+coverletter.json
+coverletter.html
+index.html
+site/
+!README.md

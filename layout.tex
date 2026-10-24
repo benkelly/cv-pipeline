@@ -1,0 +1,308 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{parskip} % for spacing between paragraphs
+\usepackage{hyperref} % for clickable links
+\usepackage{enumitem}
+\usepackage{titlesec} % to customize section titles
+\usepackage{helvet} % Use Helvetica typeface
+\usepackage{xcolor} % For text colors
+\usepackage{ifthen} % To enable conditional statements
+\usepackage{graphicx} % For the signature image
+\usepackage{fancyhdr}
+\usepackage{needspace} % For checking available space for sections
+\usepackage[none]{hyphenat} % Disable hyphenation on word breaks
+
+% Links: coloured text instead of hyperref's default cyan boxes
+% (the boxes look dated and are meaningless in the print version).
+\definecolor{linkblue}{rgb}{0.10, 0.30, 0.60}
+\hypersetup{colorlinks=true, linkcolor=linkblue, urlcolor=linkblue, filecolor=linkblue}
+
+% Section heading background for accessible layouts (overridden for inverted)
+\colorlet{headingbg}{lightgray!60}
+
+% Define a Boolean flag for accessibility features
+\newboolean{accessibility}
+\setboolean{accessibility}{false} % Default is off
+
+% Handle accessibility flag from command line
+\ifdefined\accessibilityflag
+  \setboolean{accessibility}{true}
+\fi
+
+% Conditional font selection based on accessibility
+\ifthenelse{\boolean{accessibility}}{
+  % Load accessibility settings if enabled
+  % Set higher contrast colors
+  \definecolor{gray}{rgb}{0.2, 0.2, 0.2} % Darker gray for better contrast
+  % Use a more readable line spacing
+  \renewcommand{\baselinestretch}{1.5}
+  
+  % Define inverted color scheme
+  \ifdefined\invertcolorsflag
+    % Inverted high contrast colors (yellow text on black background)
+    \pagecolor{black}
+    \color{yellow}
+    \definecolor{gray}{rgb}{0.0, 0.8, 0.8} % Cyan color for headers for better contrast with yellow text
+    % Dark teal heading bar: yellow heading text on the old pale-cyan bar was unreadable
+    \definecolor{headingbg}{rgb}{0.0, 0.22, 0.28}
+    \hypersetup{
+      colorlinks=true,
+      linkcolor=cyan,
+      filecolor=magenta,
+      urlcolor=cyan
+    }
+  \fi
+  
+  % Check if dyslexic font flag is defined
+  \ifdefined\dyslexicfontflag
+    % Use OpenDyslexic font if available
+    \usepackage{fontspec}
+    \setmainfont[
+      Path = ./fonts/,
+      Extension = .otf,
+      UprightFont = *-Regular,
+      BoldFont = *-Bold,
+      ItalicFont = *-Italic,
+      BoldItalicFont = *-BoldItalic
+    ]{OpenDyslexic}
+  \else
+    % Sans-serif (Helvetica) reads more easily, and unlike the default serif
+    % font it scales, so the large name stays large.
+    \renewcommand{\familydefault}{\sfdefault}
+  \fi
+}{
+  % Standard font settings if accessibility is not enabled
+  \renewcommand{\familydefault}{\sfdefault} % Set Helvetica as default font
+  % Standard gray color
+  \definecolor{gray}{rgb}{0.5, 0.5, 0.5}
+}
+
+% Reduce page margins
+\geometry{top=0.25in, bottom=0.25in, left=0.25in, right=0.25in}
+
+% Define a Boolean flag for dividing line (true = line, false = no line)
+\newboolean{dividingline}
+\setboolean{dividingline}{false} % Change to 'false' if you want to disable the line
+
+% Define a Boolean flag for personal contact details (true = work email, no phone)
+\newboolean{showworkinfo}
+\setboolean{showworkinfo}{false} % Change to 'true' to show work email and hide phone
+
+% Handle showworkinfo flag from command line
+\ifdefined\showworkinfoflag
+  \setboolean{showworkinfo}{true}
+\fi
+
+% Define a Boolean flag for the published link in the cover letter
+\newboolean{showpublishedlink}
+\setboolean{showpublishedlink}{false}
+
+% Handle published link flag from command line
+\ifdefined\showpublishedlinkflag
+  \setboolean{showpublishedlink}{true}
+\fi
+
+% Custom font size for name
+\newcommand{\namesection}{
+    % OpenDyslexic is much wider, so a smaller size stops a long first name running into the contact block
+    \ifdefined\dyslexicfontflag
+        {\fontsize{50}{34}\selectfont \textbf{Taylor \newline Template}} \\%
+    \else
+        {\fontsize{68}{34}\selectfont \textbf{Taylor \newline Template}} \\% Font size set to 68, bold
+    \fi
+    \vspace{0.5em} % Small space between name and contact info
+}
+
+% Custom command for contact info with grey color and conditional phone/email display
+\newcommand{\contactinfo}{
+    \color{gray}\hypersetup{urlcolor=gray} Dublin, Ireland \\
+    \ifthenelse{\boolean{showworkinfo}}{
+        \href{mailto:jobs@example.com}{jobs@example.com} \\
+    }{
+        \href{tel:+353000000000}{+353 00 000 0000} \\
+        \href{mailto:taylor@example.com}{taylor@example.com} \\
+    }
+    \href{https://example.com}{example.com} \\
+    \href{https://github.com/benkelly/cv-pipeline}{github.com/benkelly/cv-pipeline} \\
+}
+
+% ponytail: the name block is body content on page 1, not a running header. As a
+% fancyhdr running header it repeated on every page, and its 133.92pt headheight
+% reserved that much empty top margin on every page whether it drew or not.
+\pagestyle{empty}
+\newcommand{\namebanner}{%
+    \begin{minipage}[t]{0.5\textwidth}%
+        \namesection
+    \end{minipage}%
+    \begin{minipage}[t]{0.5\textwidth}%
+        \raggedleft
+        \contactinfo
+    \end{minipage}%
+    \par\vspace{1em}
+}
+
+% Use the plain style for the cover letter
+% \thispagestyle{plain}
+
+
+% Signature image. Optional: drop your own static/sig.png in to use it.
+\newcommand{\sig}{
+    \IfFileExists{static/sig.png}{
+        \includegraphics[width=0.18\textwidth]{static/sig.png}
+        \ifthenelse{\boolean{accessibility}}{
+            % Add accessibility note for screen readers
+            \mbox{}\\
+            \textit{\small [Image: handwritten signature]}
+        }{}
+    }{}
+}
+
+% Optional published link for cover letter builds
+\providecommand{\PUBLISHEDURL}{}
+\newcommand{\publishedlink}{
+    \ifthenelse{\boolean{showpublishedlink}}{
+        \leavevmode\newline
+        \vspace{1em}
+        {\small\color{gray}Full CV and cover letter available at \href{\PUBLISHEDURL}{\PUBLISHEDURL}}
+    }{}
+}
+
+% Define a reusable CV section command with three arguments, optional fourth argument, and optional dividing line
+\newcommand{\cvsection}[4][]{
+    \ifthenelse{\boolean{accessibility}}{
+        \ifdefined\newpagesectionsflag
+            % Start each section on a new page with no header
+            % \newpage
+            % \thispagestyle{empty}
+            \newpage \thispagestyle{plain} \setlength{\headheight}{0pt} 
+            % Check if there's enough space (approximately 5cm) for the section
+            % If not enough space, a page break will be inserted automatically
+        % \else
+        %     % Check if there's enough space (approximately 5cm) for the section
+        %     \needspace{5cm}
+        %     % If not enough space, a page break will be inserted automatically
+        \fi
+        % Only draw the rule and heading bar for real section titles; untitled
+        % sub-entries (e.g. later roles at the same company) used to get an empty grey bar.
+        \ifthenelse{\equal{#2}{}}{
+            \vspace{1em}
+        }{
+            % Keep the heading with its first lines instead of stranding it at a page bottom
+            \needspace{4\baselineskip}
+            \vspace{1.5em} % More space between sections for accessibility
+            \noindent\rule{\textwidth}{2pt} % Thicker dividing line for accessibility
+            \vspace{0.5em} % Space after the dividing line
+            % Add section title in a distinctive background box for better visibility
+            \noindent\colorbox{headingbg}{
+                \begin{minipage}{\dimexpr\textwidth-2\fboxsep\relax}
+                    \vspace{0.2em}
+                    \raggedright\textbf{\Large #2}
+                    \vspace{0.2em}
+                \end{minipage}
+            }
+            \vspace{0.5em}
+        }
+    }{
+        % Check if there's enough space (approximately 5cm) for the section
+        \needspace{5cm}
+        % If not enough space, a page break will be inserted automatically
+        \vspace{1em} % Standard spacing between sections
+        \ifthenelse{\boolean{dividingline}}{
+            \noindent\rule{\textwidth}{0.5pt} % If true, add a dividing line
+        }{}
+        \begin{minipage}[t]{0.25\textwidth} % Section title on the left (25%)
+            \raggedright \color{gray}\textbf{#2}
+        \end{minipage}%
+        \begin{minipage}[t]{0.75\textwidth} % Section content on the right (75%)
+            \raggedright \textbf{#3} \\
+            #4
+            \ifthenelse{\equal{#1}{}}{}{\\{\small\color{gray}#1}} % Optional argument displayed if provided
+        \end{minipage}
+    }
+    \ifthenelse{\boolean{accessibility}}{
+        % For accessible versions, use a different layout with section title at top
+        \begin{minipage}[t]{\textwidth} % Content below the section title
+            \raggedright \textbf{#3} \\
+            #4
+            \ifthenelse{\equal{#1}{}}{}{\\{\small\color{gray}#1}} % Optional argument displayed if provided
+        \end{minipage}
+    }{}
+    \vspace{1em}
+}
+
+% Custom command to render cover letter (with no fancy header)
+\newcommand{\coverletter}[2]{
+    % Name and Contact Info on the same line
+    % \noindent
+    \leavevmode\newline
+    % \leavevmode\newline
+    \vspace{1em} % Some space before the cover letter content
+    #1 % Recipient information (e.g., company, address, date)
+    \leavevmode\newline
+    \vspace{1em} % Space before the body of the letter
+    #2 % Body of the cover letter
+    \vspace{1em} % Space before the signature
+    % \noindent
+    % \leavevmode\newline
+    % \leavevmode\newline
+    % \noindent
+    % \leavevmode\newline
+    \sig % Insert the signature (SVG)
+    \leavevmode\newline
+    Taylor Template
+
+    
+    \publishedlink
+
+    \leavevmode\newpage % Insert a page break after the cover letter
+}
+
+% % Allow passing metadata from command line
+% \usepackage{shellesc} % To enable shell escape for git commands
+% \providecommand{\VERSION}{\detokenize{\ShellEscape{git describe --tags --long 2>/dev/null || echo "v0.0.1-$(git rev-parse --short HEAD)"}}}
+
+% Allow passing metadata from command line
+% Define VERSION command (default if not provided)
+\providecommand{\VERSION}{local-build}
+
+% Simple date format instead of using datetime package
+\providecommand{\simpledate}{\number\year-\ifnum\month<10 0\fi\number\month-\ifnum\day<10 0\fi\number\day}
+
+% PDF metadata - these are provided as defaults that can be overridden by \def commands from pdflatex
+\providecommand{\PDFTITLE}{Taylor Template CV -- \simpledate{} -- \VERSION}
+\providecommand{\PDFAUTHOR}{Taylor Template}
+\providecommand{\PDFSUBJECT}{Taylor Template CV -- \simpledate{} -- \VERSION}
+\providecommand{\PDFKEYWORDS}{CV, Taylor Template, Platform Engineer, Kubernetes, Terraform, Go, Python}
+
+% Set PDF metadata using hyperref
+\hypersetup{
+    pdftitle={\PDFTITLE},
+    pdfauthor={\PDFAUTHOR},
+    pdfsubject={\PDFSUBJECT},
+    pdfkeywords={\PDFKEYWORDS, \VERSION},
+    pdfcreator={cv-pipeline, github.com/benkelly/cv-pipeline},
+    pdfproducer={LaTeX}
+}
+
+% Define content input
+\begin{document}
+
+% Determine what content to include
+\namebanner
+
+\ifdefined\coverletteronly
+    % Just include the cover letter with the name section
+    \input{coverletter.tex}
+\else
+    \ifdefined\cvonly
+        % Just include the CV content without cover letter
+        \input{cv.tex}
+    \else
+        % Include both - first cover letter, then CV content
+        \input{coverletter.tex}
+        \input{cv.tex}
+    \fi
+\fi
+
+\end{document}
