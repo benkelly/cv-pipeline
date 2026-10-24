@@ -5,7 +5,7 @@ One LaTeX file. Every version of your CV, built and published by CI.
 **Live demo: [benkelly.github.io/cv-pipeline](https://benkelly.github.io/cv-pipeline/)**
 
 This is a public, cut-down copy of the pipeline I use for my own CV. The CV in
-here is made up: Alex Example doesn't exist. Swap in your own content and it
+here is made up: Taylor Template doesn't exist. Swap in your own content and it
 all still works.
 
 ## What it builds

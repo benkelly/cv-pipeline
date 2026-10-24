@@ -10,9 +10,9 @@ RELEASE_DATE ?= $(shell date +%F)
 PUBLISHED_URL ?=
 
 PDF_TITLE    ?= Curriculum Vitae - $(RELEASE_DATE)
-PDF_AUTHOR   ?= Alex Example
-PDF_SUBJECT  ?= Alex Example CV
-PDF_KEYWORDS ?= CV, Alex Example, Platform Engineer
+PDF_AUTHOR   ?= Taylor Template
+PDF_SUBJECT  ?= Taylor Template CV
+PDF_KEYWORDS ?= CV, Taylor Template, Platform Engineer
 
 ifneq ($(PUBLISHED_URL),)
 PUBLISHED_LINK_TEX_DEF = \def\showpublishedlinkflag{true}
